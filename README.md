@@ -14,7 +14,7 @@
 👉 **http://31.77.151.60:8090/**  
 *(Можно открыть с компьютера или смартфона, в 1 клик нажать «Товар 1» или «Товар 2» и получить готовую карточку).*
 
-### Вариант Б. Локальный запуск (за 1 минуту):
+### Вариант Б. Локальный запуск за 1 минуту:
 Сервис совместим со стандартным OpenAI API, а также с локальными LLM (Ollama / vLLM):
 ```bash
 git clone https://github.com/alekbg2-glitch/b2b-product-card-ai.git
@@ -23,8 +23,14 @@ cd b2b-product-card-ai
 # Установка зависимостей
 pip install -r requirements.txt
 
-# Настройка ключа (по умолчанию используется OpenAI gpt-4o-mini)
+# Настройка ключа (по умолчанию используется OpenAI gpt-4o-mini):
 export OPENAI_API_KEY="sk-..."
+
+# Либо, если у вас нет своего платного ключа OpenAI, можете воспользоваться
+# нашим временным тестовым эндпоинтом для ревью:
+# export LLM_BASE_URL="https://agy.vibeees.pro/antigravity/v1"
+# export LLM_API_KEY="recruiter-review-2026"
+# export LLM_MODEL="gemini-3.8-flash-tiered"
 
 # Запуск веб-интерфейса
 uvicorn app.main:app --port 8090 --reload
@@ -32,7 +38,7 @@ uvicorn app.main:app --port 8090 --reload
 Откройте в браузере: `http://localhost:8090`
 
 ### Вариант В. Просмотр готовых артефактов в репозитории:
-Если у вас нет под рукой API-ключа, в репозитории уже сохранены сгенерированные результаты для двух предоставленных приборов:
+Если у вас нет под рукой окружения, в репозитории сохранены готовые сгенерированные результаты для двух приборов:
 - **Товар 1 (ОВЕН МК110):** [results/product_1_oven.md](results/product_1_oven.md) и [results/product_1_oven.json](results/product_1_oven.json)
 - **Товар 2 (Манометр DM 02):** [results/product_2_manotom.md](results/product_2_manotom.md) и [results/product_2_manotom.json](results/product_2_manotom.json)
 
