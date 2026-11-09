@@ -3,10 +3,10 @@ let samplesData = {};
 document.addEventListener("DOMContentLoaded", async () => {
   // Загрузка образцов товаров
   try {
-    const res1 = await fetch("/card-ai/api/samples/product_1");
+    const res1 = await fetch("/api/samples/product_1");
     if (res1.ok) samplesData["product_1"] = await res1.json();
     
-    const res2 = await fetch("/card-ai/api/samples/product_2");
+    const res2 = await fetch("/api/samples/product_2");
     if (res2.ok) samplesData["product_2"] = await res2.json();
   } catch (err) {
     console.error("Ошибка загрузки образцов:", err);
@@ -44,11 +44,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const loader = document.getElementById("loading-overlay");
+    const resultPlaceholder = document.getElementById("result-placeholder");
     const resultContainer = document.getElementById("result-container");
+    
     loader.classList.remove("d-none");
 
     try {
-      const resp = await fetch("/card-ai/api/generate", {
+      const resp = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsedInput)
@@ -61,8 +63,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const card = await resp.json();
       renderCardResult(card);
+      resultPlaceholder?.classList.add("d-none");
       resultContainer.classList.remove("d-none");
-      resultContainer.scrollIntoView({ behavior: "smooth" });
+      
+      // На мобилках плавно скроллим к готовому результату
+      resultContainer.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (apiErr) {
       alertBox.textContent = `Ошибка генерации: ${apiErr.message}`;
       alertBox.classList.remove("d-none");
@@ -92,14 +97,14 @@ function renderCardResult(card) {
   const titleElem = document.getElementById("res-seo-title");
   const titleCount = document.getElementById("res-seo-title-count");
   titleElem.textContent = card.seo_title;
-  titleCount.textContent = `${card.seo_title_length} / 70 символов`;
+  titleCount.textContent = `${card.seo_title_length} / 70 знаков`;
   titleCount.className = `char-counter ${card.seo_title_length <= 70 ? 'valid' : 'invalid'}`;
 
   // SEO Description
   const descElem = document.getElementById("res-seo-desc");
   const descCount = document.getElementById("res-seo-desc-count");
   descElem.textContent = card.seo_description;
-  descCount.textContent = `${card.seo_description_length} / 800-1200 символов`;
+  descCount.textContent = `${card.seo_description_length} / 800-1200 знаков`;
   descCount.className = `char-counter ${(card.seo_description_length >= 750 && card.seo_description_length <= 1300) ? 'valid' : 'invalid'}`;
 
   // Queries
@@ -110,8 +115,8 @@ function renderCardResult(card) {
   const specsTbody = document.getElementById("res-specs-tbody");
   specsTbody.innerHTML = Object.entries(card.structured_specs).map(([k, v]) => `
     <tr>
-      <td class="fw-medium text-nowrap">${k}</td>
-      <td>${v === "данных нет" ? '<span class="badge bg-secondary">данных нет</span>' : v}</td>
+      <td class="fw-semibold text-secondary small py-2 pe-2" style="width: 35%;">${k}</td>
+      <td class="small py-2">${v === "данных нет" ? '<span class="badge bg-secondary">данных нет</span>' : v}</td>
     </tr>
   `).join("");
 
@@ -119,17 +124,17 @@ function renderCardResult(card) {
   document.getElementById("res-target-audience").textContent = card.commercial_block.target_audience;
   
   const tasksUl = document.getElementById("res-tasks-list");
-  tasksUl.innerHTML = card.commercial_block.key_tasks_solved.map(t => `<li>${t}</li>`).join("");
+  tasksUl.innerHTML = card.commercial_block.key_tasks_solved.map(t => `<li class="mb-1">${t}</li>`).join("");
 
   const advUl = document.getElementById("res-adv-list");
-  advUl.innerHTML = card.commercial_block.competitive_advantages.map(a => `<li>${a}</li>`).join("");
+  advUl.innerHTML = card.commercial_block.competitive_advantages.map(a => `<li class="mb-1">${a}</li>`).join("");
 
   // Warnings
   const warnWrapper = document.getElementById("res-warnings-wrapper");
   const warnList = document.getElementById("res-warnings-list");
   if (card.missing_data_warnings && card.missing_data_warnings.length > 0) {
     warnWrapper.classList.remove("d-none");
-    warnList.innerHTML = card.missing_data_warnings.map(w => `<li>${w}</li>`).join("");
+    warnList.innerHTML = card.missing_data_warnings.map(w => `<li class="mb-1">${w}</li>`).join("");
   } else {
     warnWrapper.classList.add("d-none");
   }

@@ -6,9 +6,9 @@ class Settings(BaseModel):
     app_version: str = "1.0.0"
     
     # LLM Settings (OpenAI-compatible)
-    llm_api_key: str = Field(default_factory=lambda: os.getenv("LLM_API_KEY", os.getenv("OPENAI_API_KEY", "ipi9yxWTLigbFpQH_AV_Jg")))
-    llm_base_url: str = Field(default_factory=lambda: os.getenv("LLM_BASE_URL", "https://agy.vibeees.pro/antigravity/v1"))
-    llm_model: str = Field(default_factory=lambda: os.getenv("LLM_MODEL", "gemini-3.8-flash-tiered"))
+    llm_api_key: str = Field(default_factory=lambda: os.getenv("LLM_API_KEY", os.getenv("OPENAI_API_KEY", "")))
+    llm_base_url: str = Field(default_factory=lambda: os.getenv("LLM_BASE_URL", "https://api.openai.com/v1"))
+    llm_model: str = Field(default_factory=lambda: os.getenv("LLM_MODEL", "gpt-4o-mini"))
     
     # Validation constraints
     seo_title_max_len: int = 70

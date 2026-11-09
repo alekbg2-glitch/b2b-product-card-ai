@@ -2,46 +2,45 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>B2B Product Card AI Assistant | КИПиА</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <!-- Внешний CSS файл со стилями -->
-  <link rel="stylesheet" href="/card-ai/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
 
   <!-- Навигационная панель -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="#">
+  <nav class="navbar navbar-dark bg-dark py-2 py-md-3">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a class="navbar-brand d-flex align-items-center mb-0" href="#">
         <i class="bi bi-cpu-fill text-primary fs-4 me-2"></i>
-        <span>B2B КИПиА Card Assistant</span>
+        <span>B2B КИПиА Card AI</span>
       </a>
-      <span class="badge bg-secondary">Тестовое задание: AI-разработчик</span>
+      <span class="badge bg-secondary d-none d-sm-inline-block">AI-разработчик</span>
     </div>
   </nav>
 
-  <div class="container my-4">
-    <div class="row g-4">
+  <div class="container my-3 my-md-4">
+    <div class="row g-3 g-md-4">
       
       <!-- Левая колонка: Входные данные -->
       <div class="col-lg-5">
         <div class="card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center py-3">
-            <span><i class="bi bi-file-earmark-code me-2 text-primary"></i>Входные данные о приборе</span>
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="d-flex align-items-center"><i class="bi bi-file-earmark-code me-2 text-primary"></i>Паспорт прибора</span>
             <div class="btn-group btn-group-sm">
-              <button type="button" class="btn btn-outline-secondary" id="btn-load-sample1" title="Загрузить ОВЕН МК110">ОВЕН (Товар 1)</button>
-              <button type="button" class="btn btn-outline-secondary" id="btn-load-sample2" title="Загрузить Манометр DM 02">Манотомь (Товар 2)</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-load-sample1">Товар 1 (ОВЕН)</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-load-sample2">Товар 2 (Манометр)</button>
             </div>
           </div>
-          <div class="card-body d-flex flex-column">
-            <p class="text-muted small mb-2">Вставьте JSON с техническими характеристиками или выберите образец выше:</p>
+          <div class="card-body d-flex flex-column p-3">
+            <p class="text-muted small mb-2">Выберите образец выше или вставьте свой JSON:</p>
             <form id="generate-form" class="flex-grow-1 d-flex flex-column">
-              <textarea class="form-control font-monospace flex-grow-1 mb-3" id="json-input" rows="18" placeholder="Вставьте JSON..." required></textarea>
+              <textarea class="form-control font-monospace flex-grow-1 mb-3" id="json-input" rows="14" placeholder="Вставьте JSON..." required></textarea>
               <div id="error-alert" class="alert alert-danger d-none py-2 px-3 small mb-3"></div>
-              <button type="submit" class="btn btn-primary btn-lg w-100">
-                <i class="bi bi-magic me-2"></i>Сформировать карточку товара
+              <button type="submit" class="btn btn-primary btn-lg w-100 py-2 py-md-3">
+                <i class="bi bi-magic me-2"></i>Сформировать карточку
               </button>
             </form>
           </div>
@@ -54,33 +53,33 @@
           
           <!-- Оверлей загрузки -->
           <div id="loading-overlay" class="loading-overlay d-none">
-            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
-            <h5 class="fw-bold">Формирование карточки прибора...</h5>
-            <p class="text-muted small">LLM анализирует паспортные данные и проверяет параметры на отсутствие галлюцинаций</p>
+            <div class="spinner-border text-primary mb-3" style="width: 2.8rem; height: 2.8rem;" role="status"></div>
+            <h5 class="fw-bold mb-1">Формирование карточки...</h5>
+            <p class="text-muted small mb-0">LLM анализирует паспорт и проверяет характеристики на 0 галлюцинаций</p>
           </div>
 
-          <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-card-checklist me-2 text-primary"></i>Готовый черновик карточки</span>
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-card-checklist me-2 text-primary"></i>Черновик карточки</span>
             <ul class="nav nav-pills card-header-pills" id="result-tabs" role="tablist">
               <li class="nav-item">
-                <button class="nav-link active py-1 px-3" id="preview-tab" data-bs-toggle="tab" data-bs-target="#tab-preview" type="button">Карточка</button>
+                <button class="nav-link active py-1 px-2 px-md-3" id="preview-tab" data-bs-toggle="tab" data-bs-target="#tab-preview" type="button">Карточка</button>
               </li>
               <li class="nav-item">
-                <button class="nav-link py-1 px-3" id="markdown-tab" data-bs-toggle="tab" data-bs-target="#tab-markdown" type="button">Markdown</button>
+                <button class="nav-link py-1 px-2 px-md-3" id="markdown-tab" data-bs-toggle="tab" data-bs-target="#tab-markdown" type="button">Markdown</button>
               </li>
               <li class="nav-item">
-                <button class="nav-link py-1 px-3" id="json-tab" data-bs-toggle="tab" data-bs-target="#tab-json" type="button">JSON</button>
+                <button class="nav-link py-1 px-2 px-md-3" id="json-tab" data-bs-toggle="tab" data-bs-target="#tab-json" type="button">JSON</button>
               </li>
             </ul>
           </div>
 
-          <div class="card-body">
+          <div class="card-body p-3">
             
             <!-- Заглушка пока нет данных -->
             <div id="result-placeholder" class="text-center py-5 text-muted">
-              <i class="bi bi-arrow-left-circle display-4 mb-3 d-block text-secondary"></i>
-              <h5>Черновик ещё не сформирован</h5>
-              <p class="small">Выберите товар слева и нажмите «Сформировать карточку товара»</p>
+              <i class="bi bi-arrow-left-circle display-4 mb-3 d-block text-secondary opacity-50"></i>
+              <h5 class="fw-bold">Черновик ещё не сформирован</h5>
+              <p class="small mb-0">Выберите товар слева и нажмите «Сформировать карточку»</p>
             </div>
 
             <!-- Контейнер с данными -->
@@ -91,38 +90,38 @@
                 <div class="tab-pane fade show active" id="tab-preview">
                   
                   <!-- Предупреждения о нехватке данных -->
-                  <div id="res-warnings-wrapper" class="warning-card mb-4 d-none">
-                    <h6 class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Внимание контент-менеджеру (требует уточнения):</h6>
+                  <div id="res-warnings-wrapper" class="warning-card mb-3 mb-md-4 d-none">
+                    <h6 class="fw-bold mb-1 small text-uppercase"><i class="bi bi-exclamation-triangle-fill me-2"></i>Замечания контент-менеджеру (уточнить):</h6>
                     <ul id="res-warnings-list" class="small mb-0 ps-3"></ul>
                   </div>
 
                   <!-- SEO Title -->
-                  <div class="mb-4 pb-3 border-bottom">
+                  <div class="mb-3 mb-md-4 pb-3 border-bottom">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                       <span class="text-muted small fw-bold text-uppercase">SEO-Заголовок:</span>
                       <span id="res-seo-title-count" class="char-counter">0 / 70</span>
                     </div>
-                    <h5 id="res-seo-title" class="fw-bold text-primary mb-0"></h5>
+                    <h5 id="res-seo-title" class="fw-bold text-primary mb-0 fs-6 fs-md-5"></h5>
                   </div>
 
                   <!-- SEO Поисковые запросы -->
-                  <div class="mb-4 pb-3 border-bottom">
-                    <span class="text-muted small fw-bold text-uppercase d-block mb-2">Поисковые запросы (3–5 ключей):</span>
+                  <div class="mb-3 mb-md-4 pb-3 border-bottom">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-2">Поисковые запросы:</span>
                     <div id="res-search-queries"></div>
                   </div>
 
                   <!-- SEO Описание -->
-                  <div class="mb-4 pb-3 border-bottom">
+                  <div class="mb-3 mb-md-4 pb-3 border-bottom">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                      <span class="text-muted small fw-bold text-uppercase">SEO-Описание для каталога:</span>
+                      <span class="text-muted small fw-bold text-uppercase">SEO-Описание товара:</span>
                       <span id="res-seo-desc-count" class="char-counter">0 / 800-1200</span>
                     </div>
-                    <p id="res-seo-desc" class="mb-0" style="line-height: 1.6; text-align: justify;"></p>
+                    <p id="res-seo-desc" class="mb-0 small" style="line-height: 1.6; text-align: justify;"></p>
                   </div>
 
                   <!-- Характеристики -->
-                  <div class="mb-4 pb-3 border-bottom">
-                    <span class="text-muted small fw-bold text-uppercase d-block mb-2">Структурированные характеристики:</span>
+                  <div class="mb-3 mb-md-4 pb-3 border-bottom">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-2">Ключевые характеристики:</span>
                     <div class="table-responsive">
                       <table class="table table-sm table-hover mb-0">
                         <tbody id="res-specs-tbody"></tbody>
@@ -132,16 +131,16 @@
 
                   <!-- Commercial блок -->
                   <div class="mb-2">
-                    <span class="text-muted small fw-bold text-uppercase d-block mb-2">Commercial-блок для отдела продаж:</span>
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-2">Commercial-блок отдела продаж:</span>
                     <div class="bg-light p-3 rounded">
-                      <p class="mb-2"><strong>Кому подходит:</strong> <span id="res-target-audience"></span></p>
-                      <div class="row g-3">
-                        <div class="col-md-6">
-                          <strong class="small d-block mb-1">Решаемые задачи:</strong>
+                      <p class="mb-2 small"><strong>Кому подходит:</strong> <span id="res-target-audience"></span></p>
+                      <div class="row g-2 g-md-3">
+                        <div class="col-12 col-md-6">
+                          <strong class="small d-block mb-1 text-primary">Решаемые задачи:</strong>
                           <ul id="res-tasks-list" class="small ps-3 mb-0"></ul>
                         </div>
-                        <div class="col-md-6">
-                          <strong class="small d-block mb-1">Конкурентные преимущества:</strong>
+                        <div class="col-12 col-md-6">
+                          <strong class="small d-block mb-1 text-success">Преимущества:</strong>
                           <ul id="res-adv-list" class="small ps-3 mb-0"></ul>
                         </div>
                       </div>
@@ -176,14 +175,13 @@
     </div>
   </div>
 
-  <footer class="text-center py-4 text-muted small border-top bg-white mt-5">
+  <footer class="text-center py-3 text-muted small border-top bg-white mt-4 mt-md-5">
     <div class="container">
       B2B Product Card AI Assistant · Прототип сервиса автоматизации контента КИПиА
     </div>
   </footer>
 
-  <!-- Внешние JS-скрипты -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/card-ai/static/js/main.js"></script>
+  <script src="/static/js/main.js"></script>
 </body>
 </html>
