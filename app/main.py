@@ -34,7 +34,7 @@ generator_service = CardGeneratorService()
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
     """Главная страница веб-интерфейса"""
-    return templates.TemplateResponse("index.html", {"request": request, "app_name": settings.app_name})
+    return templates.TemplateResponse(request=request, name="index.html", context={"app_name": settings.app_name})
 
 @app.get("/api/samples/{product_id}")
 async def get_sample_product(product_id: str):

@@ -3,10 +3,10 @@ let samplesData = {};
 document.addEventListener("DOMContentLoaded", async () => {
   // Загрузка образцов товаров
   try {
-    const res1 = await fetch("/api/samples/product_1");
+    const res1 = await fetch("/card-ai/api/samples/product_1");
     if (res1.ok) samplesData["product_1"] = await res1.json();
     
-    const res2 = await fetch("/api/samples/product_2");
+    const res2 = await fetch("/card-ai/api/samples/product_2");
     if (res2.ok) samplesData["product_2"] = await res2.json();
   } catch (err) {
     console.error("Ошибка загрузки образцов:", err);
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loader.classList.remove("d-none");
 
     try {
-      const resp = await fetch("/api/generate", {
+      const resp = await fetch("/card-ai/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsedInput)
